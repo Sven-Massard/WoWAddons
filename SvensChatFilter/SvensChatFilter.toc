@@ -4,5 +4,4 @@
 ## Notes: 
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
-SvensChatFilter.lua
 SvensChatFilter.xml

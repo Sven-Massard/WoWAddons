@@ -1,4 +1,9 @@
-function SCF_OnLoad(self)
+local _, ns = ...
+SCF = ns
+
+SCF_filterList = {}
+
+function SCF:OnLoad(self)
     SlashCmdList["SCF"] = function(cmd)
         local params = {}
         local i = 1
@@ -13,19 +18,24 @@ function SCF_OnLoad(self)
     self:RegisterEvent("CHAT_MSG_CHANNEL")
 end
 
-function eventHandler(self, event, arg1)
---print(arg1)
+function SCF:eventHandler(self, event, arg1, ...)
     if event == "CHAT_MSG_CHANNEL" then
-        --print("Chat Nachricht gefunden!")
-		
-    elseif event == "ADDON_LOADED" and arg1 == "SvensChatFilter" then
-        loadAddon() -- in SvensBamAddonConfig.lua
-		print(arg1)
-		print(event)
-		print(self)
+		local message = arg1
+		local charName, _, _, channelNumber, channelName = select(4, ...)
+		for _, v in pairs(SCF_filterList) do
+			if string.match(message, v) then
+				print(message)
+			end
+		end
+	elseif event == "ADDON_LOADED" and arg1 == "SvensChatFilter" then
+		SCF:saveFilterList("Kraul Kloster SM")
+		print("Svens chat filter loaded!")
     end
 end
 
-function loadAddon()
-	print("SCF LOADED!")
+function SCF:saveFilterList(arg)
+    SCF_filterList = {}
+    for arg in string.gmatch(arg, "%S+") do
+        table.insert(SCF_filterList, arg)
+    end
 end
