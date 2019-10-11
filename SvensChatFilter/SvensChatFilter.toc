@@ -1,7 +1,0 @@
-## Interface: 11302
-## Title: Svens Chat Filter
-## Author: Verband
-## Notes: 
-## DefaultState: Enabled
-## LoadOnDemand: 0
-SvensChatFilter.xml
