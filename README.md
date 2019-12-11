@@ -5,5 +5,7 @@ To get the latest stable version, please visit https://www.curseforge.com/wow/ad
 TODO:
 
 Report function for bam list
+
 Seperate messages and sounds for damage and healing
+
 Enter folder name as sound option to play random file sound from folder at crit
