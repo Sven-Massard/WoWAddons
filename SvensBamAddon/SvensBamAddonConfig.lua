@@ -101,7 +101,8 @@ function SBM:loadAddon()
     SvensBamAddonChannelOptions.panel.parent = "Svens Bam Addon"
     SvensBamAddonChannelOptions.panel.okay = function()
         SBM:saveWhisperList()
-		SBM:saveSoundfile()
+		SBM:saveSoundfileDamage()
+		SBM:saveSoundfileHeal()
     end
     SBM:populateChannelSubmenu(channelButtonList, channelList)
 	
@@ -111,10 +112,8 @@ function SBM:loadAddon()
     SvensBamAddonGeneralOptions.panel.name = "General options";
     SvensBamAddonGeneralOptions.panel.parent = "Svens Bam Addon"
     SvensBamAddonGeneralOptions.panel.okay = function()
-        SBM:saveDamageOutputList()
-		SBM:saveHealOutputList()
-		SBM:saveSoundfileDamage()
-		SBM:saveSoundfileHeal()
+        SBM:saveDamageOutputMessage()
+		SBM:saveHealOutputMessage()
         SBM:saveThreshold()
     end
     SBM:populateGeneralSubmenu(eventButtonList, SBM_eventList, rgb)
@@ -243,7 +242,7 @@ function SBM:createOutputDamageMessageEditBox(height, width, y)
         end)
     outputDamageMessageEditBox:SetScript( "OnEnterPressed", function(...)
         outputDamageMessageEditBox:ClearFocus()
-        SBM:saveDamageOutputList()
+        SBM:saveDamageOutputMessage()
     end)
     outputDamageMessageEditBox:SetScript( "OnEnter", function(...)            
         GameTooltip:SetOwner(outputDamageMessageEditBox, "ANCHOR_BOTTOM");
@@ -267,7 +266,7 @@ function SBM:createOutputHealMessageEditBox(height, width, y)
         end)
     outputHealMessageEditBox:SetScript( "OnEnterPressed", function(...)
         outputHealMessageEditBox:ClearFocus()
-        SBM:saveHealOutputList()
+        SBM:saveHealOutputMessage()
     end)
     outputHealMessageEditBox:SetScript( "OnEnter", function(...)            
         GameTooltip:SetOwner(outputHealMessageEditBox, "ANCHOR_BOTTOM");
@@ -554,11 +553,11 @@ function SBM:saveSoundfileHeal()
 	SBM_soundfileHeal = soundfileHealFrame:GetText()
 end
 	
-function SBM:saveDamageOutputList()
+function SBM:saveDamageOutputMessage()
     SBM_outputDamageMessage = outputDamageMessageEditBox:GetText()
 end
 
-function SBM:saveHealOutputList()
+function SBM:saveHealOutputMessage()
     SBM_outputHealMessage = outputHealMessageEditBox:GetText()
 end
 
