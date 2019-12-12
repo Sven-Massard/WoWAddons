@@ -4,6 +4,7 @@ To get the latest stable version, please visit https://www.curseforge.com/wow/ad
 
 TODO:
 
-If not in raid, do not report to raid
+If whisper target is not online, don't try to whisper
+Offer option to not to whisper to dnd players
 
 Enter folder name as sound option to play random file sound from folder at crit
