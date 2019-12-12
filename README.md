@@ -6,5 +6,3 @@ TODO:
 
 If whisper target is not online, don't try to whisper
 Offer option to not to whisper to dnd players Useful: /script print(UnitIsDND("Verband"))
-
-Enter folder name as sound option to play random file sound from folder at crit
