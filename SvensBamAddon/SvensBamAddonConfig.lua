@@ -4,6 +4,7 @@ function SBM:loadAddon()
     local outputMessageEditBox
     local channelButtonList = {}
     local eventButtonList = {}
+	local miscellaneousButtonList = {}
     local channelList = 
         {
             "Say",
@@ -59,10 +60,20 @@ function SBM:loadAddon()
             {name = "Melee Autohit", eventType = "SWING_DAMAGE",  boolean = false},
             {name = "Heal", eventType = "SPELL_HEAL",  boolean = false},
         }
+		
+	local defaultMiscellaneousList = 
+		{
+			{name = "killing blow", description = "Play sound on killing blow", boolean = false},
+		}
 
     --reset SBM_eventList in case defaultEventList was updated
     if(SBM_eventList == nil or not (# SBM_eventList == #defaultEventList)) then 
         SBM_eventList = defaultEventList
+    end
+	
+	--reset SBM_miscellaneousList in case defaultMiscellaneousList was updated
+    if(SBM_miscellaneousList == nil or not (# SBM_miscellaneousList == #defaultMiscellaneousList)) then 
+        SBM_miscellaneousList = defaultMiscellaneousList
     end
       
     if(SBM_critList == nil) then
@@ -116,7 +127,7 @@ function SBM:loadAddon()
 		SBM:saveHealOutputMessage()
         SBM:saveThreshold()
     end
-    SBM:populateGeneralSubmenu(eventButtonList, SBM_eventList, rgb)
+    SBM:populateGeneralSubmenu(eventButtonList, miscellaneousButtonList, SBM_eventList, rgb)
 	
 	--Set order of Menus here
     InterfaceOptions_AddCategory(SvensBamAddonConfig.panel);
@@ -126,7 +137,7 @@ function SBM:loadAddon()
     print(SBM_color.."Svens Bam Addon loaded!")
 end
 
-function SBM:populateGeneralSubmenu(eventButtonList, SBM_eventList, rgb)
+function SBM:populateGeneralSubmenu(eventButtonList, miscellaneousButtonList, SBM_eventList, rgb)
 
 	local lineHeight = 16
 	local boxHeight = 32
@@ -190,6 +201,19 @@ function SBM:populateGeneralSubmenu(eventButtonList, SBM_eventList, rgb)
 	boxesPlaced = boxesPlaced +1
 	categorieNumber = categorieNumber + 1
 	
+	-- Miscellaneous
+	
+    SvensBamAddonGeneralOptions.panel.title = SvensBamAddonGeneralOptions.panel:CreateFontString("MiscellaneousDescription", "OVERLAY"); --TODO Edit Description on bottom
+    SvensBamAddonGeneralOptions.panel.title:SetFont(GameFontNormal:GetFont(), 14, "NONE");
+    SvensBamAddonGeneralOptions.panel.title:SetPoint("TOPLEFT", 5, -(baseYOffSet + categorieNumber*categoriePadding + amountLinesWritten*lineHeight + boxesPlaced*boxSpacing));
+    amountLinesWritten = amountLinesWritten + 1
+	
+    for i=1, # SBM_miscellaneousList do
+        SBM:createMiscellaneousCheckBoxes(i, 1, -(baseYOffSet + categorieNumber*categoriePadding + amountLinesWritten*lineHeight + boxesPlaced*boxSpacing), miscellaneousButtonList, SBM_miscellaneousList)
+		boxesPlaced = boxesPlaced +1
+    end
+	categorieNumber = categorieNumber + 1
+	
 	-- Color changer 
     yOffSet = 3
 	SvensBamAddonGeneralOptions.panel.title = SvensBamAddonGeneralOptions.panel:CreateFontString("FontColorDescription", "OVERLAY");
@@ -215,7 +239,7 @@ function SBM:createEventTypeCheckBoxes(i, x, y, eventButtonList, SBM_eventList)
     
     _G[checkButton:GetName() .. "Text"]:SetText(SBM_eventList[i].name)
     _G[checkButton:GetName() .. "Text"]:SetFont(GameFontNormal:GetFont(), 14, "NONE")
-    for j = 1, # SBM_eventList do
+    for j = 1, # SBM_eventList do --TODO check if for loop really needed
         if(SBM_eventList[i].boolean) then            
             eventButtonList[i]:SetChecked(true)
         end
@@ -322,6 +346,31 @@ function SBM:createTriggerOnlyOnCritRecordCheckBox(x, y)
             SBM_onlyOnNewMaxCrits = false
         end
     end)
+end
+
+function SBM:createMiscellaneousCheckBoxes(i, x, y, miscellaneousButtonList, SBM_miscellaneousList)
+    local checkButton = CreateFrame("CheckButton", "SvensBamAddon_MiscellaneousCheckButton" .. i, SvensBamAddonGeneralOptions.panel, "UICheckButtonTemplate")
+    miscellaneousButtonList[i] = checkButton
+    checkButton:ClearAllPoints()
+    checkButton:SetPoint("TOPLEFT", x * 32, y)
+    checkButton:SetSize(32, 32)
+    
+    _G[checkButton:GetName() .. "Text"]:SetText(SBM_miscellaneousList[i].description)
+    _G[checkButton:GetName() .. "Text"]:SetFont(GameFontNormal:GetFont(), 14, "NONE")
+    for j = 1, # SBM_miscellaneousList do --TODO check if for loop really needed
+        if(SBM_miscellaneousList[i].boolean) then            
+            miscellaneousButtonList[i]:SetChecked(true)
+        end
+    end
+
+    miscellaneousButtonList[i]:SetScript("OnClick", function()   
+        if miscellaneousButtonList[i]:GetChecked() then
+            SBM_miscellaneousList[i].boolean = true
+        else
+            SBM_miscellaneousList[i].boolean = false
+        end
+    end)
+
 end
 
 function SBM:populateChannelSubmenu(channelButtonList, channelList)
@@ -595,4 +644,5 @@ function SBM:setPanelTexts()
 	OutputChannelDescription:SetText(SBM_color.."Output Channel")
     ThresholdDescription:SetText(SBM_color.."Least amount of damage/heal to trigger bam:")
     OnlyOnMaxCritsDescription:SetText(SBM_color.."Trigger options:")
+	MiscellaneousDescription:SetText(SBM_color.."Miscellaneous:")
 end

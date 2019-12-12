@@ -41,8 +41,21 @@ function SBM:combatLogEvent(self, event, ...)
     elseif (eventType == "SWING_DAMAGE") then
         spellName = "Autohit"
         amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(12, CombatLogGetCurrentEventInfo())
+	else
+		do return end
     end
     
+	--Extract miscellaneous options
+	for i=1, #SBM_miscellaneousList do
+		if(SBM_miscellaneousList[i].name == "killing blow") then
+			SBM_killingBlowSoundEnabled = SBM_miscellaneousList[i].boolean
+		end
+	end
+	
+	if (SBM_killingBlowSoundEnabled and overkill>=0) then
+		SBM:playRandomSoundFromList("Customsounds\\wilhelm.ogg")
+	end
+	
     if (amount ~= nil and amount < SBM_threshold and SBM_threshold ~= 0) then
         do return end
     end
@@ -113,7 +126,7 @@ function SBM:bam_cmd(params)
         for i = 1, # SBM_outputChannelList do
             print(SBM_color..SBM_outputChannelList[i])
         end
-		SBM:playRandomSoundFromList(SBM_soundfileDamage)
+		SBM:playRandomSoundFromList("Customsounds\\wilhelm.ogg")
     else
         print("Bam Error: Unknown command")
     end   
