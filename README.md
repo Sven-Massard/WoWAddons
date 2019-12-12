@@ -4,6 +4,6 @@ To get the latest stable version, please visit https://www.curseforge.com/wow/ad
 
 TODO:
 
-Report function for bam list
+If not in raid, do not report to raid
 
 Enter folder name as sound option to play random file sound from folder at crit
