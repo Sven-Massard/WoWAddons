@@ -1,6 +1,40 @@
 ﻿local _,ns = ...
 SBM = ns
 
+-- Function for event filter for CHAT_MSG_SYSTEM to suppress message of player on whisper list being offline when being whispered to
+function SBM_suppressWhisperMessage(self, event, msg, author, ...)
+	-- TODO Suppression only works for Portugese, English, German and French because they have the same naming format.
+	-- See https://www.townlong-yak.com/framexml/live/GlobalStrings.lua
+	local textWithoutName = msg:gsub("%'%a+%'", ""):gsub("  ", " ")
+
+	localizedPlayerNotFoundStringWithoutName = ERR_CHAT_PLAYER_NOT_FOUND_S:gsub("%'%%s%'", ""):gsub("  ", " ")
+
+	if not (textWithoutName == localizedPlayerNotFoundStringWithoutName) then
+		return false
+	end
+
+	local name = string.gmatch(msg, "%'%a+%'")
+
+	-- gmatch returns iterator.
+	for w in name do
+		name = w
+	end
+	if not (name == nil) then	
+		name = name:gsub("'", "")
+	else
+		return false
+	end
+
+	local isNameInWhisperList = false
+	for _, w in pairs(SBM_whisperList) do
+		if(w == name) then
+			isNameInWhisperList = true
+		end
+	end
+	return isNameInWhisperList
+
+end
+
 function SBM:BAM_OnLoad(self)
     SlashCmdList["BAM"] = function(cmd)
         local params = {}
@@ -14,12 +48,15 @@ function SBM:BAM_OnLoad(self)
     SLASH_BAM1 = '/bam'
     self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", SBM_suppressWhisperMessage)
 end
 
 function SBM:eventHandler(self, event, arg1)
     if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+
         SBM:combatLogEvent(self, event, arg1)
     elseif event == "ADDON_LOADED" and arg1 == "SvensBamAddon" then
+		SBM_icon = nil -- Needs to be initialized to be saved
         SBM:loadAddon() -- in SvensBamAddonConfig.lua
     end
 end
@@ -46,26 +83,42 @@ function SBM:combatLogEvent(self, event, ...)
     if (amount ~= nil and amount < SBM_threshold and SBM_threshold ~= 0) then
         do return end
     end
+	
     for i=1, # SBM_eventList do
         if (eventType == SBM_eventList[i].eventType and SBM_eventList[i].boolean and critical == true) then
             newMaxCrit = SBM:addToCritList(spellName, amount);
             if(SBM_onlyOnNewMaxCrits and not newMaxCrit) then
                 do return end
             end
-            local output = SBM_outputMessage:gsub("(SN)", spellName):gsub("(SD)", amount):gsub("TN", enemyName)
+			local output
+			if eventType == "SPELL_HEAL" then
+				output = SBM_outputHealMessage:gsub("(SN)", spellName):gsub("(SD)", amount):gsub("TN", enemyName)
+			else
+				output = SBM_outputDamageMessage:gsub("(SN)", spellName):gsub("(SD)", amount):gsub("TN", enemyName)
+			end
             for _, v in pairs(SBM_outputChannelList) do
                 if v == "Print" then
                     print(SBM_color..output)
                 elseif (v == "Whisper") then
                     for _, w in pairs(SBM_whisperList) do
-                        SendChatMessage(output, "WHISPER", "COMMON", w)
+						SendChatMessage(output, "WHISPER", "COMMON", w)
                     end
-				elseif (v == "Sound") then
-					PlaySoundFile(SBM_soundfile)
+				elseif (v == "Sound DMG") then
+					if (eventType ~= "SPELL_HEAL") then
+						SBM:playRandomSoundFromList(SBM_soundfileDamage)
+					end
+				elseif (v == "Sound Heal") then
+					if (eventType == "SPELL_HEAL") then
+						SBM:playRandomSoundFromList(SBM_soundfileHeal)
+					end
 				elseif (v == "Battleground") then
 					inInstance, instanceType = IsInInstance()
 					if(instanceType == "pvp") then
 						SendChatMessage(output, "INSTANCE_CHAT" )
+					end
+				elseif (v == "Officer") then
+					if (CanEditOfficerNote()) then
+						SendChatMessage(output ,v )
 					end
                 else
                     SendChatMessage(output ,v );
@@ -81,10 +134,13 @@ function SBM:bam_cmd(params)
     if(cmd == "help" or cmd == "") then
         print(SBM_color.."Possible parameters:")
         print(SBM_color.."list: lists highest crits of each spell")
+		print(SBM_color.."report: report highest crits of each spell to channel list")
         print(SBM_color.."clear: delete list of highest crits")
 		print(SBM_color.."config: Opens config page")
     elseif(cmd == "list") then
         SBM:listCrits();
+	elseif(cmd == "report") then
+        SBM:reportCrits();	
     elseif(cmd == "clear") then
         SBM:clearCritList();   
     elseif(cmd == "config") then
@@ -92,11 +148,17 @@ function SBM:bam_cmd(params)
 		InterfaceOptionsFrame_OpenToCategory(SvensBamAddonConfig.panel)
 		InterfaceOptionsFrame_OpenToCategory(SvensBamAddonConfig.panel)
 	elseif(cmd == "test") then
-        for i = 1, # SBM_outputChannelList do
-            print(SBM_color..SBM_outputChannelList[i])
-        end
-		PlaySoundFile(SBM_soundfile)
+		print(SBM_color.."Function not implemented")
     else
-        print("Bam Error: Unknown command")
+        print(SBM_color.."Bam Error: Unknown command")
     end   
+end
+
+function SBM:playRandomSoundFromList(listOfFilesAsString)
+	SBM_soundFileList = {}
+    for arg in string.gmatch(listOfFilesAsString, "%S+") do
+        table.insert(SBM_soundFileList, arg)
+    end
+	local randomIndex = random(1, #SBM_soundFileList)
+	PlaySoundFile(SBM_soundFileList[randomIndex])
 end
