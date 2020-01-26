@@ -112,13 +112,18 @@ function SBM:combatLogEvent(self, event, ...)
 						SBM:playRandomSoundFromList(SBM_soundfileHeal)
 					end
 				elseif (v == "Battleground") then
-					inInstance, instanceType = IsInInstance()
+					local inInstance, instanceType = IsInInstance()
 					if(instanceType == "pvp") then
 						SendChatMessage(output, "INSTANCE_CHAT" )
 					end
 				elseif (v == "Officer") then
 					if (CanEditOfficerNote()) then
 						SendChatMessage(output ,v )
+					end
+				elseif (v == "Say" or v == "Yell") then
+					local inInstance, instanceType = IsInInstance()
+					if(inInstance) then
+						SendChatMessage(output ,v );
 					end
                 else
                     SendChatMessage(output ,v );

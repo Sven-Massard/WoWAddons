@@ -1,0 +1,10 @@
+## Interface: 11303
+## Title: Svens Loot AddOn
+## Author: Verband
+## Version: 0.1
+## Notes: Stuff with loot and stuff
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: SLA_itemList,SLA_whisperList,SLA_output_message,SLA_outputChannelList,SLA_color
+SvensLootAddon.xml
+SvensLootAddonConfig.lua
