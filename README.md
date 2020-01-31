@@ -4,5 +4,10 @@ To get the latest stable version, please visit https://www.curseforge.com/wow/ad
 
 TODO:
 
-If whisper target is not online, don't try to whisper
-Offer option to not to whisper to dnd players Useful: /script print(UnitIsDND("Verband"))
+Loot Addon:
+
+Fix: If multiple of an item are looted, e.g. [Heavy Stone]x2, item "[Heavy Stone]x2" is added to loot list instead of [Heavy Stone]
+Add ability to reset loot list
+Add ability to print loot list
+Add ability to report loot list
+Add time stamp of last loot list reset
