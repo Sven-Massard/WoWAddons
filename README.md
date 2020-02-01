@@ -7,7 +7,4 @@ TODO:
 Loot Addon:
 
 Fix: If multiple of an item are looted, e.g. [Heavy Stone]x2, item "[Heavy Stone]x2" is added to loot list instead of [Heavy Stone]
-Add ability to reset loot list
-Add ability to print loot list
-Add ability to report loot list
 Add time stamp of last loot list reset
