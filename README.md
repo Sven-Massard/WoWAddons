@@ -3,8 +3,3 @@ Please note, this repository might contain versions under development which migh
 To get the latest stable version, please visit https://www.curseforge.com/wow/addons/svens-bam-addon
 
 TODO:
-
-Loot Addon:
-
-Fix: If multiple of an item are looted, e.g. [Heavy Stone]x2, item "[Heavy Stone]x2" is added to loot list instead of [Heavy Stone]
-Add time stamp of last loot list reset
