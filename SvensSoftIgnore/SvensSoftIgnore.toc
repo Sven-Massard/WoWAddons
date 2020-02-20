@@ -1,0 +1,9 @@
+## Interface: 11303
+## Title: Svens Soft Ignore Addon
+## Author: Verband
+## Version: 0.1
+## Notes: Ignore players without notifying them
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: SSIL
+SvensSoftIgnore.xml
