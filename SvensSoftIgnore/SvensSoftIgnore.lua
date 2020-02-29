@@ -22,17 +22,7 @@ function SSIL_suppressWhisperMessage(self, event, msg, author, ...)
 end
 
 function SSIL:OnLoad(self)
-    SlashCmdList["SSIL"] = function(cmd)
-	    local params = {}
-        local i = 1
-        for arg in string.gmatch(cmd, "%S+") do
-            params[i] = arg
-            i = i + 1
-        end
-        SSIL:slash_cmd(params)
-    end
 
-    SLASH_SLA1 = '/ssil'
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", SSIL_suppressWhisperMessage)
 	
 end
