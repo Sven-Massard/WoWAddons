@@ -36,14 +36,21 @@ function SLA_suppressWhisperMessage(self, event, msg, author, ...)
 end
 
 function SLA:OnLoad(self)
-    SlashCmdList["SLA"] = function()
-		InterfaceOptionsFrame_OpenToCategory(SvensLootAddonConfig.panel)
-		InterfaceOptionsFrame_OpenToCategory(SvensLootAddonConfig.panel)
-	end
+    SlashCmdList["SLA"] = function(cmd)
+	    local params = {}
+        local i = 1
+        for arg in string.gmatch(cmd, "%S+") do
+            params[i] = arg
+            i = i + 1
+        end
+        SLA:slash_cmd(params)
+    end
+
     SLASH_SLA1 = '/sla'
     self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("CHAT_MSG_LOOT")
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", SLA_suppressWhisperMessage)
+	
 end
 
 function SLA:eventHandler(self, event, ...)
@@ -54,11 +61,12 @@ function SLA:eventHandler(self, event, ...)
 
 		local LootString = LOOT_ITEM_SELF:gsub("%%s.", "")
 
-		for i=1, # SLA_itemList do 
+		for i=1, # SLA_itemsToTrackList do 
 			-- Thanks to EasyLoot for strmatch
-			if(strmatch(msg, LootString..".*"..SLA_itemList[i]..".*")) then
+			if(strmatch(msg, LootString..".*"..SLA_itemsToTrackList[i]..".*")) then
 				local ItemLink = msg:gsub(LootString, ""):gsub("%.", "")
-				SLA:Chat_Message_Loot_Event(ItemLink)
+				local timesItemFound = SLA:AddToLootList(ItemLink)
+				SLA:send_messages_from_outputChannelList(SLA_output_message, ItemLink, timesItemFound)
 			end
 		end
 		
@@ -71,12 +79,11 @@ function SLA:eventHandler(self, event, ...)
     end
 end
 
-function SLA:Chat_Message_Loot_Event(itemName)
-			local output
-				output = SLA_output_message:gsub("(IN)", itemName)
+function SLA:send_messages_from_outputChannelList(message, itemName, timesItemFound)
+			local output = message:gsub("(IN)", itemName):gsub("(I#)", timesItemFound):gsub("(TS)", SLA_timeStamp) -- Keep same as in print except for color code
             for _, v in pairs(SLA_outputChannelList) do
                 if v == "Print" then
-                    print(SLA_color..output)
+                    print(SLA_color..message:gsub("(IN)", itemName..SLA_color):gsub("(I#)", timesItemFound):gsub("(TS)", SLA_timeStamp))
                 elseif (v == "Whisper") then
                     for _, w in pairs(SLA_whisperList) do
 						SendChatMessage(output, "WHISPER", "COMMON", w)
@@ -99,9 +106,33 @@ function SLA:Chat_Message_Loot_Event(itemName)
 						SendChatMessage(output ,v );
 					end
                 else
-					print(v)
                     SendChatMessage(output ,v );
                 end
             end
+end
 
+function SLA:slash_cmd(params)
+    cmd = params[1]
+    local firstVariable=2
+    if(cmd == "help" or cmd == "") then
+        print(SLA_color.."Possible parameters:")
+        print(SLA_color.."list: Lists loot list")
+		print(SLA_color.."report: Report loot list")
+        print(SLA_color.."clear: Delete loot list. Also resets time stamp.")
+		print(SLA_color.."config: Opens config page")
+    elseif(cmd == "list") then
+        SLA:listLootList();
+	elseif(cmd == "report") then
+        SLA:reportLootList();
+    elseif(cmd == "clear") then
+        SLA:clearLootList();
+    elseif(cmd == "config") then
+		-- For some reason, needs to be called twice to function correctly on first call
+		InterfaceOptionsFrame_OpenToCategory(SvensLootAddonConfig.panel)
+		InterfaceOptionsFrame_OpenToCategory(SvensLootAddonConfig.panel)
+	elseif(cmd == "test") then
+		print(SLA_color.."Function not implemented")
+    else
+        print(SLA_color.."SLA Error: Unknown command. Type /sla help for list of commands.")
+    end   
 end
