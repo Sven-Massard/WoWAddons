@@ -19,9 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1becf907-0101-4767-985f-55ca00e527a3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="1becf907-0101-4767-985f-55ca00e527a3" name="Default Changelist" comment="Items are now compared with already found items by item name instead of item link&#10;&#10;Item links seem to contain the level of the char that found the item. This led to multiple entries in the item list.&#10;A one time script runs after installing the new version to fix the item list">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddon.lua" beforeDir="false" afterPath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddon.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddon.toc" beforeDir="false" afterPath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddon.toc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddonConfig.lua" beforeDir="false" afterPath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddonConfig.lua" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddonList.lua" beforeDir="false" afterPath="$PROJECT_DIR$/SvensLootAddon/SvensLootAddonList.lua" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +60,7 @@
       <recent name="D:\WoWAddons\.idea" />
     </key>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -72,6 +76,8 @@
       <workItem from="1587055720034" duration="726000" />
       <workItem from="1587059085930" duration="984000" />
       <workItem from="1587983768034" duration="177000" />
+      <workItem from="1597004521322" duration="233000" />
+      <workItem from="1597004775525" duration="7650000" />
     </task>
     <task id="LOCAL-00001" summary="Add gitignore and idea files">
       <created>1587048851059</created>
@@ -84,7 +90,7 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -100,17 +106,17 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add gitignore and idea files" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add gitignore and idea files" />
+    <MESSAGE value="Items are now compared with already found items by item name instead of item link&#10;&#10;Item links seem to contain the level of the char that found the item. This led to multiple entries in the item list.&#10;A one time script runs after installing the new version to fix the item list" />
+    <option name="LAST_COMMIT_MESSAGE" value="Items are now compared with already found items by item name instead of item link&#10;&#10;Item links seem to contain the level of the char that found the item. This led to multiple entries in the item list.&#10;A one time script runs after installing the new version to fix the item list" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="905" y="277" key="CommitChangelistDialog2" timestamp="1587048850465">
+    <state x="872" y="341" key="#Plugins" timestamp="1597004763055">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="905" y="277" key="CommitChangelistDialog2/0.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1587048850465" />
-    <state x="1700" y="454" key="FileChooserDialogImpl" timestamp="1587983942728">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="872" y="341" key="#Plugins/0.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1597004763055" />
+    <state x="-2398" y="88" width="2305" height="1286" key="CommitChangelistDialog2" timestamp="1597011101303">
+      <screen x="-2560" y="0" width="2560" height="1400" />
     </state>
-    <state x="-860" y="454" key="FileChooserDialogImpl/0.0.2560.1400/-2560.0.2560.1400@-2560.0.2560.1400" timestamp="1587983785737" />
-    <state x="1700" y="454" key="FileChooserDialogImpl/0.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1587983942728" />
+    <state x="-2398" y="88" width="2305" height="1286" key="CommitChangelistDialog2/0.0.2560.1400/-2560.0.2560.1400@-2560.0.2560.1400" timestamp="1597011101303" />
   </component>
 </project>
